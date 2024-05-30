@@ -18,8 +18,9 @@ if (!empty($_POST)) {
 }
 
 $pageFlag = 0;
+$errors = validation($_POST);
 
-if (!empty($_POST['btn_confirm'])) {
+if (!empty($_POST['btn_confirm']) && empty($errors)) {
     $pageFlag = 1;
 }
 
@@ -48,6 +49,16 @@ function h($str)
         }
         $token = $_SESSION['csrfToken'];
         ?>
+
+        <?php if (!empty($errors) && !empty($_POST['btn_confirm'])) : ?>
+            <?php echo '<ul>'; ?>
+            <?php
+            foreach ($errors as $error) {
+                echo '<li>' . $error . '</li>';
+            }
+            ?>
+            <?php echo '</ul>'; ?>
+        <?php endif; ?>
         <form method="POST" action="input.php">
             氏名
             <input tyoe="text" name='your_name' value="<?php if (!empty($_POST['your_name'])) echo h($_POST['your_name']); ?>">
